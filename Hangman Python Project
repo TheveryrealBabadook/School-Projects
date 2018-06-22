@@ -1,0 +1,77 @@
+from random import* #imports everything in the random module 
+tryAgain = True 
+while tryAgain == True : #the point the program returns to when the user wants to start again, completely resets everything
+    words=["orange","dog","after","most","shark","country","monday","king","stop","spark"] #the list of words from which a word is selected
+    word = choice(words) #uses the 'choice' function from the random module to randomly select a word from the word list
+    correctGuesses=0 
+    guessesLeft=10 #the user's lives, begins at 10 and depreciates to 0 as they guess incorrectly
+    pastGuesses=[""] #the list of guesses the user has made, the program refers to this list so a user can't repeatedly enter the same character 
+    continueVar2 = True 
+
+    
+    while continueVar2 == True:
+        continueVar = True
+
+        while continueVar == True: #the point the program returns to after all of the user's guesses
+            while True:  #continues untill there is a break in the loop
+                guess = input("Please guess a character: ") #asks for the user's guess
+                try: 
+                    guess = int(guess) #tries to convert the user's input to an integer
+                except ValueError: #if it can't be converted, the input is not a number and the loop breaks, continuing the program
+                    break #breaks the loop
+                else: #if the input can be converted, the loop continues and the user has to enter new input until it is not a number
+                    print("That is a number not a letter") #informs the user their guess is a number and invalid
+
+            guess = guess.lower() #changes the user's guess to the same character but lowercase, so the user can't input upper and lower case as different characters
+
+            if guess in pastGuesses: #checks if the user's guess is repeatedb by referring to the list of user guesses
+                print ("That guess is invalid, please ensure that you do not enter the same guess twice")
+                continueVar = False #returns the user to the point where the user inputs a new guess
+                
+            elif len(guess) > 1: # checks if the user's guess is more than 1 character long and if it is, it returns as invalid 
+                print ("That guess is invalid, please ensure your guess is no longer than one character.")
+                continueVar = False #returns the user to make a new guess
+                
+            elif guess in word: #checks if the user's guessed character is correct by checking if it's in the word randomly selected, if it is, it returns as correct
+                print ("That guess is correct, well done!")
+                correctGuesses = correctGuesses + 1 #increases the user's correct guess count by one
+                
+                if correctGuesses == len(word): #checks if the amount of correct guesses is equal to the amount of characters in the word
+                    print ("You have correctly guesed all the letters in the word:", word + ", well done!") #if it is, the user wins
+                    again = input("Would you like to play again? [Y/N]")
+                    
+                    if again == "Y": #returns the user to the beginning of the program, resetting everything
+                        continueVar2 = False
+                        continueVar = False
+                        
+                    else: #exits the program
+                        continueVar2 = False #breaks the container loop
+                        continueVar = False #breaks the loop containing the individual game
+                        tryAgain =  False #breaks the loop containing everything forming the game, no independantly functioning code outside the loop, so it exits the program
+                        
+                else: #if there are still more characters to guess, the user's guess for the turn is added to the list of guesses
+                    pastGuesses.append(guess)
+                    continueVar = False #the user is returned to make a new guess
+                    
+            else: #if the user's guess is not in the word, it is returned as incorrect
+                print("That guess is incorrect")
+                guessesLeft =  guessesLeft - 1 #the user's lives are decreased by one
+                print("You have", guessesLeft, "guesses remaining")
+                
+                if guessesLeft == 0: #if the user's lives reaches 0, the user loses
+                    print("You have used all of your guesses")
+                    again = input("Would you like to try again? [Y/N]: ")
+                    
+                    if again == "Y": #returns the user to the beginning, resetting everything
+                        continueVar = False
+                        tryAgain =  True
+                        
+                    else: #exits the program
+                        continueVar2 = False
+                        continueVar = False
+                        tryAgain =  False
+                        
+                else: #if the user still has lives remaining:
+                    pastGuesses.append(guess) #adds the user's guess for the turn to the list of user guesses
+                    continueVar = False #returns the user to make a new guess
+
